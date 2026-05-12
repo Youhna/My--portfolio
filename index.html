@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artist Portfolio | Minimal</title>
+    <!-- 样式重置 -->
+    <link rel="stylesheet" href="reset.css" />
+    <!-- 引入谷歌字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Grotesk:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 主样式表 -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- 🎨 创意动效：跟随鼠标的光标 -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- ============================
+         1. 导航栏 (Navbar)
+         ============================ -->
+    <nav class="navbar">
+      <div class="logo">YOUHAN's Art Space.</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <!-- 👇 这里的链接指向 work.html (所有作品页) -->
+        <li><a href="work.html">Work</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+      <div class="burger">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+      </div>
+    </nav>
+
+    <!-- ============================
+         2. 首页封面 (Hero Section)
+         ============================ -->
+    <section id="home" class="hero-section">
+      <div class="hero-text reveal-text">
+        <h1>Youhan Xiong<br />Portfolio</h1>
+        <p>Creative Video Producer working across AI, video, and editing.</p>
+      </div>
+      <a href="#gallery" class="scroll-down-btn">
+        <span>Explore</span>
+        <span class="arrow">↓</span>
+      </a>
+    </section>
+
+    <!-- ============================
+         3. 无限滚动字幕 (Marquee)
+         ============================ -->
+    <div class="marquee-container">
+      <div class="marquee-content">
+        CREATIVE • PHOTOGRAPHY • ART DIRECTION • DESIGN • VIDEO •  CONCEPT • CREATIVE •
+        PHOTOGRAPHY • ART DIRECTION • DESIGN • VIDEO • CONCEPT •
+      </div>
+    </div>
+
+    <!-- ============================
+         4. 精选作品 (Selected Works)
+         ============================ -->
+    <section id="gallery" class="section-container">
+      <div class="section-header">
+        <h2>Selected Works</h2>
+        <span class="line"></span>
+        <p>2024 — 2026</p>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- 👇 修改点：将 div 改为 a 标签，并指向 project-detail.html -->
+
+        <!-- 作品 1 -->
+        <a href="project-Afterwards.html" class="art-card reveal-up">
+          <div class="img-wrapper">
+            <img src="assets/images/img9.jpg" alt="Work 2" />
+          </div>
+          <div class="card-info">
+            <h3>Afterwords</h3>
+            <p>AIGC</p>
+          </div>
+        </a>
+
+        <!-- 作品 2 -->
+        <a href="project-In Plain Sight.html" class="art-card reveal-up">
+          <div class="img-wrapper">
+            <img src="assets/images/img10.jpg" alt="Work 3" />
+          </div>
+          <div class="card-info">
+            <h3>In plain sight</h3>
+            <p>AIGC</p>
+          </div>
+        </a>
+
+        <!-- 作品 3 -->
+        <a href="project-忘念.html" class="art-card reveal-up">
+          <div class="img-wrapper">
+            <img src="assets/images/img8.PNG" alt="Work 4" />
+          </div>
+          <div class="card-info">
+            <h3>忘·念</h3>
+            <p>AIGC</p>
+          </div>
+        </a>
+
+        <!-- 作品 4 -->
+        <a href="project-Reality.html" class="art-card reveal-up">
+          <div class="img-wrapper">
+            <img src="assets/images/img11.png" alt="Work 1" />
+          </div>
+          <div class="card-info">
+            <h3>Reality: Echoes carved in silence</h3>
+            <p>AIGC</p>
+          </div>
+        </a>
+
+      </div>
+
+      
+
+      <!-- 👇 新增：查看更多按钮 -->
+      <div style="text-align: center; margin-top: 4rem">
+        <a
+          href="work.html"
+          style="
+            font-size: 1.2rem;
+            border-bottom: 1px solid #000;
+            padding-bottom: 5px;
+            font-family: var(--font-heading);
+          "
+        >
+          View All Projects →
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================
+         5. 关于板块 (About)
+         ============================ -->
+    <section
+      id="about"
+      class="section-container"
+      style="background: #111; color: #fff"
+    >
+      <div class="about-grid">
+        <!-- 左侧：文字 -->
+        <div class="about-text reveal-up">
+          <h2>About<br />The Designer.</h2>
+          <p class="bio-text">
+            Digital media creator specialising in video production and visual storytelling. My practice focuses on short
+            video and AIGC creative production. I aim to leverage emerging media technologies to develop engaging digital
+            content that connects, inspires, and leaves a lasting impression.
+          </p>
+
+          <div class="resume-details">
+            <div class="resume-block">
+              <h4>Skills</h4>
+              <p>AIGC, Video, Editing, Photography, Sound Design</p>
+            </div>
+
+            <div class="resume-block">
+              <h4>Contact</h4>
+              <p>
+                Email: s3987940@student.rmit.edu.au<br />
+              </p>
+              <p>WeChat：_924_081_42</p>
+              <p>Rednote：950311845</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：图片 -->
+        <div class="profile-image">
+          <img src="assets/images/艺术家照片.jpg" alt="Artist" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         6. 页脚 (Footer)
+         ============================ -->
+    <footer class="footer">
+      <p>&copy; 2025 YOUHAN Art Space. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
