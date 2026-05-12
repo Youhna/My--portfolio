@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Name | Detail</title>
+    
+    <!-- 样式重置 -->
+    <link rel="stylesheet" href="reset.css" />
+    <!-- 引入谷歌字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Grotesk:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 主样式表 -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- 🎨 鼠标特效 -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- ============================
+         1. 导航栏
+         ============================ -->
+    <nav class="navbar">
+      <div class="logo">YOUHAN's Art Space.</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <!-- 点击 Work 返回总列表页 -->
+        <li><a href="work.html" style="border-bottom: 1px solid #000;">Work</a></li>
+        <li><a href="index.html#about">About</a></li>
+      </ul>
+      <div class="burger">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+      </div>
+    </nav>
+
+    <!-- ============================
+         2. 作品详情容器
+         ============================ -->
+    <div class="project-container reveal-up">
+        
+        <!-- A. 顶部标题信息 -->
+        <div class="project-header">
+            <h1>忘·念</h1>
+            <p class="meta">Category: AIGC / Video &nbsp;•&nbsp; Year: 2025</p>
+        </div>
+
+         <!-- B. 媒体展示区 (三选一) -->
+        <div class="project-media">
+        <a href="http://xhslink.com/o/5XZrZG5yjWn" target="_blank" class="video">
+    
+        <!-- 封面图 -->
+        <img src="assets/images/img8.PNG" alt="Project Main Image">
+
+        </a>
+        </div>
+
+  
+
+        <!-- C. 作品文字介绍 -->
+         <div class="project-description">
+         <div class="desc-col">
+         <h3>Intro</h3>
+         </div>
+
+         <div class="desc-col">
+         <p>A poetic short film exploring emotional withdrawal, memory, and the quiet process of self-return.</p>
+         <p>Through minimal narration and atmospheric imagery, the work traces a journey from silence and detachment toward a fragile reconnection with the world.</p>
+         <p>It reflects on loss, endurance, and the subtle persistence of belief.</p>
+         <p>Tools used: MidJourney, Jimeng, Kling, Suno.</p>
+         
+         <div class="project-media">
+         <img src="assets/images/忘-1.png" alt="Project Main Image">
+         </div>
+  </div>
+</div>
+
+<!-- ===== Narrative Writing 部分（新的平级块）===== -->
+ <div class="project-description">
+    <div class="desc-col">
+    <h3>Narrative Writing</h3>
+    </div>
+     
+    <div class="poem-container">
+  <div class="poem">
+
+    <stanza>
+      <line>The world has lost its voice,</line>
+      <line>and I have lost myself.</line>
+      <line>I no longer look back,</line>
+      <line>nor do I long for anything.</line>
+      <line>In this windless depth,</line>
+      <line>I confine my soul,</line>
+      <line>and let it slowly freeze.</line>
+    </stanza>
+
+    <stanza>
+      <line>The soul is buried,</line>
+      <line>yet memory still breathes.</line>
+      <line>When the first light breaks through the forest,</line>
+      <line>I do not turn away.</line>
+      <line>Something trembles within me—</line>
+      <line>something, from the depths of silence,</line>
+      <line>calls me back into the world.</line>
+    </stanza>
+
+    <stanza>
+      <line>I see who I once was—</line>
+      <line>eyes clear,</line>
+      <line>like untouched moonlight.</line>
+      <line>He looks at me quietly,</line>
+      <line>waiting for me to admit</line>
+      <line>that I am not an orphan of this beautiful world.</line>
+      <line>"Keep walking. Be brave."</line>
+      <line>I let the pain</line>
+      <line>spread slowly within me.</line>
+      <line>The sky is vast, yet without love—</line>
+      <line>I once thought that was the end.</line>
+      <line>But light always returns with warmth,</line>
+      <line>like a silent mercy,</line>
+      <line>gently covering me.</line>
+    </stanza>
+
+    <stanza>
+      <line>The wind moves across the field,</line>
+      <line>stretching my shadow long—endlessly long.</line>
+      <line>Perhaps I must learn</line>
+      <line>to move forward, calmly,</line>
+      <line>through every moment of parting.</line>
+      <line>And in the end—</line>
+      <line>How could I ever forget you,</line>
+      <line>my love?</line>
+      <line>I would choose to be</line>
+      <line>a quiet, ordinary pearl</line>
+      <line>set within you.</line>
+    </stanza>
+  </article>
+</div>
+</div>
+</div>
+
+        <!-- D. 底部导航 (返回列表) -->
+        <div class="next-project" style="margin-top: 4rem; text-align: center;">
+            <a href="work.html">← Back to All Works</a>
+        </div>
+
+    </div>
+
+    <!-- ============================
+         3. 页脚
+         ============================ -->
+    <footer class="footer">
+      <p>&copy; 2025 YOUHAN Art Space. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 脚本 -->
+    <script src="script.js"></script>
+  </body>
+</html>
