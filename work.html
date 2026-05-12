@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Work | All Projects</title>
+
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Grotesk:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      /* =============================================
+         SOUND DESIGN INLINE PANEL — WHITE MINIMAL
+         ============================================= */
+
+      #sound-panel {
+        display: none;
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+        animation: fadeInUp 0.45s ease both;
+      }
+
+      #work-grid-wrapper {
+        display: block;
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(18px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ---- 播放器卡片 ---- */
+      .sp-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        min-height: 240px;
+        background: #fff;
+      }
+
+      @media (max-width: 640px) {
+        .sp-card { grid-template-columns: 1fr; }
+      }
+
+      /* 左侧封面 */
+      .sp-cover {
+        position: relative;
+        background: #f4f4f4;
+        overflow: hidden;
+        min-height: 240px;
+      }
+
+      .sp-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s ease;
+      }
+
+      .sp-card.is-playing .sp-cover img {
+        animation: coverPulse 4s ease-in-out infinite;
+      }
+
+      @keyframes coverPulse {
+        0%, 100% { transform: scale(1);    opacity: 1; }
+        50%       { transform: scale(1.03); opacity: 0.92; }
+      }
+
+      .sp-badge {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.62rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #fff;
+        background: rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.25);
+        padding: 3px 9px;
+        border-radius: 2px;
+        backdrop-filter: blur(6px);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+      }
+
+      .sp-card.is-playing .sp-badge { opacity: 1; }
+
+      /* 右侧控制区 */
+      .sp-controls {
+        padding: 1.8rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1.4rem;
+      }
+
+      .sp-track-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111;
+        margin-bottom: 0.25rem;
+      }
+
+      .sp-track-sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.74rem;
+        font-weight: 300;
+        color: #999;
+        letter-spacing: 0.03em;
+      }
+
+      /* 波形 */
+      .sp-waveform {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        height: 48px;
+        cursor: pointer;
+      }
+
+      .sp-bar {
+        flex: 1;
+        background: #e8e8e8;
+        border-radius: 1px;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.15s;
+      }
+
+      .sp-bar::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%;
+        height: 0%;
+        background: #111;
+        border-radius: 1px;
+        transition: height 0.08s linear;
+      }
+
+      .sp-bar.played::after  { height: 100%; background: #333; }
+      .sp-bar.active::after  { height: 100%; background: #111; animation: activeFlash 0.5s ease-in-out infinite alternate; }
+      .sp-bar.unplayed::after{ height: 0%; }
+
+      @keyframes activeFlash {
+        from { background: #555; }
+        to   { background: #000; }
+      }
+
+      .sp-card.is-playing .sp-bar.unplayed {
+        animation: waveFloat var(--dur, 0.8s) ease-in-out infinite alternate;
+        animation-delay: var(--delay, 0s);
+      }
+
+      @keyframes waveFloat {
+        from { transform: scaleY(0.8); }
+        to   { transform: scaleY(1.2); }
+      }
+
+      .sp-time-row {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 300;
+        color: #bbb;
+        letter-spacing: 0.05em;
+        margin-top: 0.35rem;
+      }
+
+      .sp-playback-row {
+        display: flex;
+        align-items: center;
+        gap: 1.1rem;
+      }
+
+      .sp-btn-play {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #111;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.2s, transform 0.15s;
+      }
+
+      .sp-btn-play:hover  { background: #333; transform: scale(1.06); }
+      .sp-btn-play:active { transform: scale(0.95); }
+
+      .sp-icon-play, .sp-icon-pause { fill: #fff; }
+      .sp-icon-pause { display: none; }
+
+      .sp-card.is-playing .sp-icon-play  { display: none; }
+      .sp-card.is-playing .sp-icon-pause { display: block; }
+
+      .sp-volume {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-left: auto;
+      }
+
+      .sp-volume svg { fill: #bbb; flex-shrink: 0; }
+
+      .sp-vol-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 76px;
+        height: 1.5px;
+        background: #ddd;
+        border-radius: 2px;
+        outline: none;
+        cursor: pointer;
+      }
+
+      .sp-vol-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 11px; height: 11px;
+        border-radius: 50%;
+        background: #111;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      #sp-audio { display: none; }
+
+      /* ---- YouTube iframe 区域 ---- */
+      /* 当曲目是 YouTube 时，替换波形+按钮区域显示 iframe */
+      .sp-youtube-area {
+        display: none;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 3px;
+        overflow: hidden;
+        background: #f0f0f0;
+      }
+
+      .sp-youtube-area iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+      }
+
+      /* YouTube 模式：隐藏波形控制，显示 iframe */
+      .sp-card.is-youtube .sp-waveform-wrapper { display: none; }
+      .sp-card.is-youtube .sp-playback-row     { display: none; }
+      .sp-card.is-youtube .sp-youtube-area     { display: block; }
+
+      /* ---- 曲目列表 ---- */
+      .sp-tracklist {
+        margin-top: 1.2rem;
+        border-top: 1px solid #ebebeb;
+      }
+
+      .sp-tl-header {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        gap: 1rem;
+        padding: 0.7rem 0.5rem;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #bbb;
+        border-bottom: 1px solid #ebebeb;
+      }
+
+      .sp-track-row {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        gap: 1rem;
+        align-items: center;
+        padding: 0.8rem 0.5rem;
+        border-bottom: 1px solid #f3f3f3;
+        cursor: pointer;
+        border-radius: 3px;
+        transition: background 0.15s;
+      }
+
+      .sp-track-row:hover { background: #fafafa; }
+      .sp-track-row.sp-active-track { background: #f7f7f7; }
+
+      .sp-tnum {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 300;
+        color: #bbb;
+        text-align: center;
+      }
+
+      .sp-track-row.sp-active-track .sp-tnum { color: #111; }
+
+      .sp-track-row.sp-active-track.sp-is-playing .sp-tnum-inner::after {
+        content: '';
+        display: inline-block;
+        width: 5px; height: 5px;
+        background: #111;
+        border-radius: 50%;
+        margin-left: 3px;
+        vertical-align: middle;
+        animation: dotPulse 0.75s ease-in-out infinite alternate;
+      }
+
+      @keyframes dotPulse {
+        from { opacity: 0.25; }
+        to   { opacity: 1; }
+      }
+
+      /* YouTube 标签徽章 */
+      .sp-yt-badge {
+        display: inline-block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #999;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        padding: 1px 5px;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+
+      .sp-tname {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.83rem;
+        font-weight: 300;
+        color: #888;
+      }
+
+      .sp-track-row.sp-active-track .sp-tname { color: #111; }
+
+      .sp-tdur {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 300;
+        color: #bbb;
+        letter-spacing: 0.05em;
+      }
+
+      /* ---- 简介区 ---- */
+      .sp-desc {
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid #ebebeb;
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 2rem;
+      }
+
+      @media (max-width: 580px) {
+        .sp-desc { grid-template-columns: 1fr; gap: 0.6rem; }
+      }
+
+      .sp-desc-label {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 300;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #bbb;
+        padding-top: 0.15rem;
+      }
+
+      .sp-desc-body p {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.86rem;
+        font-weight: 300;
+        color: #555;
+        line-height: 1.85;
+        margin-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- ============================
+         1. 导航栏
+         ============================ -->
+    <nav class="navbar">
+      <div class="logo">YOUHAN's Art Space.</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html" style="border-bottom: 1px solid #000;">Work</a></li>
+        <li><a href="index.html#about">About</a></li>
+      </ul>
+      <div class="burger">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+      </div>
+    </nav>
+
+    <!-- ============================
+         2. 头部筛选区
+         ============================ -->
+    <div class="work-header-section reveal-up">
+      <h1>Selected Works</h1>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="image">Image</button>
+        <button class="filter-btn" data-filter="video">Video</button>
+        <button class="filter-btn" data-filter="audio">Sound Design</button>
+      </div>
+    </div>
+
+    <!-- ============================
+         3. 作品网格
+         ============================ -->
+    <div id="work-grid-wrapper" class="section-container" style="padding-top: 0;">
+      <div class="gallery-grid" id="work-grid">
+
+        <a href="project-Afterwards.html" class="art-card reveal-up" data-category="video">
+          <div class="img-wrapper">
+            <img src="assets/images/img9.jpg" alt="Abstract Art">
+          </div>
+          <div class="card-info">
+            <h3>Afterwards</h3>
+            <p>AIGC / Video</p>
+          </div>
+        </a>
+
+        <a href="project-In Plain Sight.html" class="art-card reveal-up" data-category="video">
+          <div class="img-wrapper">
+            <img src="assets/images/In-1.png" alt="Video Project">
+          </div>
+          <div class="card-info">
+            <h3>In Plain Sight</h3>
+            <p>AIGC / Video</p>
+          </div>
+        </a>
+
+        <a href="project-Where the light begins.html" class="art-card reveal-up" data-category="video">
+          <div class="img-wrapper">
+            <img src="assets/images/Where-1.png" alt="Audio Project">
+          </div>
+          <div class="card-info">
+            <h3>Where the light begins</h3>
+            <p>Experimental short film / Video</p>
+          </div>
+        </a>
+
+        <a href="project-Reality.html" class="art-card reveal-up" data-category="video">
+          <div class="img-wrapper">
+            <img src="assets/images/img11.png" alt="Video">
+          </div>
+          <div class="card-info">
+            <h3>Reality: Echoes carved in silence</h3>
+            <p>AIGC / Video</p>
+          </div>
+        </a>
+
+        <a href="project-light.html" class="art-card reveal-up" data-category="image">
+          <div class="img-wrapper">
+            <img src="assets/images/光-1.jpg" alt="Image">
+          </div>
+          <div class="card-info">
+            <h3>Light</h3>
+            <p>Photography / Image</p>
+          </div>
+        </a>
+
+        <a href="project-Forward.html" class="art-card reveal-up" data-category="image">
+          <div class="img-wrapper">
+            <img src="assets/images/船.jpg" alt="Collage">
+          </div>
+          <div class="card-info">
+            <h3>Forward</h3>
+            <p>Photography / Image</p>
+          </div>
+        </a>
+
+        <a href="project-忘念.html" class="art-card reveal-up" data-category="video">
+          <div class="img-wrapper">
+            <img src="assets/images/img8.PNG" alt="Video Project">
+          </div>
+          <div class="card-info">
+            <h3>Forget / Remember</h3>
+            <p>AIGC / Video</p>
+          </div>
+        </a>
+
+        <a href="project-The ELM.html" class="art-card reveal-up" data-category="image">
+          <div class="img-wrapper">
+            <img src="assets/images/ELM-4.png" alt="Collage">
+          </div>
+          <div class="card-info">
+            <h3>The ELM</h3>
+            <p>AI / Image</p>
+          </div>
+        </a>
+
+        <a href="project-Stone.html" class="art-card reveal-up" data-category="image">
+          <div class="img-wrapper">
+            <img src="assets/images/S-3.png" alt="Collage">
+          </div>
+          <div class="card-info">
+            <h3>Stone</h3>
+            <p>AI / Image</p>
+          </div>
+        </a>
+
+        <a href="project-Scene.html" class="art-card reveal-up" data-category="image">
+          <div class="img-wrapper">
+            <img src="assets/images/C-3.jpg" alt="Collage">
+          </div>
+          <div class="card-info">
+            <h3>Scene</h3>
+            <p>AI / Image</p>
+          </div>
+        </a>
+
+        <a href="project-Ocean.html" class="art-card reveal-up" data-category="image">
+          <div class="img-wrapper">
+            <img src="assets/images/O-3.jpg" alt="Collage">
+          </div>
+          <div class="card-info">
+            <h3>Ocean</h3>
+            <p>AI / Image</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ============================
+         4. Sound Design 内嵌播放器
+         ============================ -->
+    <div id="sound-panel">
+
+      <div class="sp-card" id="sp-card">
+
+        <!-- 左侧封面 -->
+        <div class="sp-cover">
+          <!-- 修复：id 改为 sp-cover-img，初始封面对应第一首曲目 -->
+          <img src="assets/images/SO-1.png" alt="Sound Design Cover" id="sp-cover-img" />
+          <span class="sp-badge">Now Playing</span>
+        </div>
+
+        <!-- 右侧控制区 -->
+        <div class="sp-controls">
+
+          <div>
+            <div class="sp-track-title" id="sp-track-title">Ambient</div>
+            <div class="sp-track-sub">YOUHAN &nbsp;&bull;&nbsp; Sound Design</div>
+          </div>
+
+          <!-- 波形 + 时间（普通音频时显示） -->
+          <div class="sp-waveform-wrapper">
+            <div class="sp-waveform" id="sp-waveform" title="Click to seek"></div>
+            <div class="sp-time-row">
+              <span id="sp-time-cur">0:00</span>
+              <span id="sp-time-tot">0:00</span>
+            </div>
+          </div>
+
+          <!-- YouTube iframe（YouTube 曲目时显示） -->
+          <div class="sp-youtube-area" id="sp-youtube-area">
+            <iframe
+              id="sp-yt-iframe"
+              src=""
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+
+          <!-- 播放按钮行（YouTube 时自动隐藏） -->
+          <div class="sp-playback-row">
+            <button class="sp-btn-play" id="sp-btn-play" aria-label="Play / Pause">
+              <svg class="sp-icon-play"  width="15" height="15" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="sp-icon-pause" width="15" height="15" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+
+            <div class="sp-volume">
+              <svg width="13" height="13" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+              <input type="range" class="sp-vol-slider" id="sp-vol" min="0" max="1" step="0.01" value="0.8" aria-label="Volume" />
+            </div>
+          </div>
+
+        </div>
+        
+      </div>
+
+      <!-- 原生 audio 元素：只初始化第一首，JS 动态切换 src -->
+      <audio id="sp-audio" preload="metadata">
+        <source src="assets/audio/Youhan_Ambient.MP3" type="audio/mpeg" />
+      </audio>
+
+      <!-- 曲目列表 -->
+      <div class="sp-tracklist">
+        <div class="sp-tl-header">
+          <span>#</span><span>Title</span><span>Duration</span>
+        </div>
+
+        <!--
+          data-src   : 本地音频用文件路径（mp3/wav/mp4 均可）
+                       YouTube 用 https://www.youtube.com/embed/视频ID
+          data-type  : "youtube" 表示 YouTube 曲目，其余不填或填 "audio"
+          data-title : 播放器上方显示的曲目名
+          data-cover : 切换时更新封面图路径
+        -->
+        <div class="sp-track-row sp-active-track"
+             data-src="assets/audio/Youhan_Ambient.MP3"
+             data-type="audio"
+             data-title="Track 01 — Ambient"
+             data-cover="assets/images/SO-1.png">
+          <span class="sp-tnum"><span class="sp-tnum-inner">1</span></span>
+          <span class="sp-tname">Ambient</span>
+          <span class="sp-tdur">3:23</span>
+        </div>
+
+        <div class="sp-track-row"
+             data-src="assets/audio/Youhan_Soundscape.wav"
+             data-type="audio"
+             data-title="Track 02 — Soundscape"
+             data-cover="assets/images/SO-2.png">
+          <span class="sp-tnum"><span class="sp-tnum-inner">2</span></span>
+          <span class="sp-tname">Soundscape</span>
+          <span class="sp-tdur">4:19</span>
+        </div>
+
+        <div class="sp-track-row"
+             data-src="assets/audio/Reality.mp3"
+             data-type="audio"
+             data-title="Track 03 — Reality"
+             data-cover="assets/images/sound-3.png">
+          <span class="sp-tnum"><span class="sp-tnum-inner">3</span></span>
+          <span class="sp-tname">Reality</span>
+          <span class="sp-tdur">4:16</span>
+        </div>
+
+        <!-- YouTube 曲目：data-type="youtube"，data-src 用 embed 链接 -->
+        <div class="sp-track-row"
+             data-src="assets/audio/Ghost.mp3"
+             data-title="Track 04 — Ghost"
+             data-cover="assets/images/SO-4.png">
+          <span class="sp-tnum"><span class="sp-tnum-inner">4</span></span>
+          <span class="sp-tname">
+            Ghost
+          </span>
+          <span class="sp-tdur">3:49</span>
+        </div>
+
+      </div>
+
+      <!-- 简介 -->
+      <div class="sp-desc">
+        <div class="sp-desc-label">About</div>
+        <div class="sp-desc-body">
+          <p>
+            I have completed academic courses in Sound Design, with professional capabilities in full-pipeline audio production for moving images.
+            Independently handled the entire sound design process for all my short films, including Foley recording, sound effect design, ambient background layering, and multi-track audio mixing.
+            I specialize in using auditory atmosphere to match visual emotion and enhance narrative immersion.
+          </p>
+        </div>
+      </div>
+
+      <div class="sp-desc" style="border-top: none; padding-top: 0; margin-top: 1rem;">
+        <div class="sp-desc-label">Tools</div>
+        <div class="sp-desc-body">
+          <p>Reaper / GarageBand / Adobe Audition</p>
+        </div>
+      </div>
+
+      <!-- D. 底部导航 (返回列表) -->
+        <div class="next-project" style="margin-top: 4rem; text-align: center;">
+            <a href="work.html">← Back to All Works</a>
+        </div>
+        
+    </div>
+    <!-- /sound-panel -->
+
+    <!-- ============================
+         5. 页脚
+         ============================ -->
+    <footer class="footer">
+      <p>&copy; 2025 YOUHAN Art Space. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+    (function () {
+
+      /* ============================
+         A. 筛选逻辑
+         ============================ */
+      const filterBtns  = document.querySelectorAll('.filter-btn');
+      const cards       = document.querySelectorAll('.art-card');
+      const gridWrapper = document.getElementById('work-grid-wrapper');
+      const soundPanel  = document.getElementById('sound-panel');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const category = btn.getAttribute('data-filter');
+
+          if (category === 'audio') {
+            gridWrapper.style.display = 'none';
+            soundPanel.style.display  = 'block';
+            soundPanel.style.animation = 'none';
+            soundPanel.offsetHeight;
+            soundPanel.style.animation = '';
+          } else {
+            gridWrapper.style.display = 'block';
+            soundPanel.style.display  = 'none';
+
+            /* 离开时停止所有播放 */
+            if (spAudio && !spAudio.paused) {
+              spAudio.pause();
+              spCard.classList.remove('is-playing');
+            }
+            /* 停掉 YouTube iframe（置空 src） */
+            if (spYtIframe) spYtIframe.src = '';
+            spCard.classList.remove('is-youtube');
+
+            cards.forEach(card => {
+              const c = card.getAttribute('data-category');
+              if (category === 'all' || category === c) {
+                card.style.display = 'block';
+                card.style.opacity = '0';
+                setTimeout(() => { card.style.opacity = '1'; card.style.transition = 'opacity 0.3s ease'; }, 50);
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          }
+        });
+      });
+
+      /* ============================
+         B. 播放器逻辑
+         ============================ */
+      const spAudio     = document.getElementById('sp-audio');
+      const spCard      = document.getElementById('sp-card');
+      const spBtn       = document.getElementById('sp-btn-play');
+      const spWaveform  = document.getElementById('sp-waveform');
+      const spTimeCur   = document.getElementById('sp-time-cur');
+      const spTimeTot   = document.getElementById('sp-time-tot');
+      const spVol       = document.getElementById('sp-vol');
+      const spTitleEl   = document.getElementById('sp-track-title');
+      const spCoverImg  = document.getElementById('sp-cover-img');      /* 修复：正确 id */
+      const spYtIframe  = document.getElementById('sp-yt-iframe');
+      const spTrackRows = document.querySelectorAll('.sp-track-row');
+
+      const BAR_COUNT = 48;
+
+      /* 生成波形条 */
+      for (let i = 0; i < BAR_COUNT; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'sp-bar unplayed';
+        const h = 18 + Math.random() * 68;
+        bar.style.height = h + '%';
+        bar.style.setProperty('--dur',   (0.5 + Math.random() * 0.8).toFixed(2) + 's');
+        bar.style.setProperty('--delay', (Math.random() * 0.4).toFixed(2) + 's');
+        spWaveform.appendChild(bar);
+      }
+
+      const spBars = spWaveform.querySelectorAll('.sp-bar');
+
+      function fmt(s) {
+        if (isNaN(s) || !isFinite(s)) return '0:00';
+        return Math.floor(s / 60) + ':' + (Math.floor(s % 60) < 10 ? '0' : '') + Math.floor(s % 60);
+      }
+
+      function resetBars() {
+        spBars.forEach(b => { b.classList.remove('played', 'active'); b.classList.add('unplayed'); });
+      }
+
+      function updateBars() {
+        if (!spAudio.duration) return;
+        const prog   = spAudio.currentTime / spAudio.duration;
+        const filled = Math.floor(prog * BAR_COUNT);
+        spBars.forEach((bar, i) => {
+          bar.classList.remove('played', 'active', 'unplayed');
+          if      (i < filled)   bar.classList.add('played');
+          else if (i === filled) bar.classList.add('active');
+          else                   bar.classList.add('unplayed');
+        });
+        spTimeCur.textContent = fmt(spAudio.currentTime);
+      }
+
+      function togglePlay() {
+        /* YouTube 模式下不操作 audio */
+        if (spCard.classList.contains('is-youtube')) return;
+        if (spAudio.paused) {
+          spAudio.play();
+          spCard.classList.add('is-playing');
+          updateActiveRowState();
+        } else {
+          spAudio.pause();
+          spCard.classList.remove('is-playing');
+        }
+      }
+
+      spBtn.addEventListener('click', togglePlay);
+
+      spAudio.addEventListener('timeupdate',     updateBars);
+      spAudio.addEventListener('loadedmetadata', () => { spTimeTot.textContent = fmt(spAudio.duration); });
+      spAudio.addEventListener('ended', () => {
+        spCard.classList.remove('is-playing');
+        resetBars();
+        spTimeCur.textContent = '0:00';
+        spTrackRows.forEach(r => r.classList.remove('sp-is-playing'));
+      });
+
+      /* seek */
+      spWaveform.addEventListener('click', e => {
+        if (!spAudio.duration || spCard.classList.contains('is-youtube')) return;
+        const rect = spWaveform.getBoundingClientRect();
+        spAudio.currentTime = ((e.clientX - rect.left) / rect.width) * spAudio.duration;
+      });
+
+      /* 音量 */
+      spAudio.volume = parseFloat(spVol.value);
+      spVol.addEventListener('input', () => { spAudio.volume = parseFloat(spVol.value); });
+
+      function updateActiveRowState() {
+        spTrackRows.forEach(r => r.classList.remove('sp-is-playing'));
+        const active = document.querySelector('.sp-track-row.sp-active-track');
+        if (active) active.classList.add('sp-is-playing');
+      }
+
+      /* 曲目切换 */
+      spTrackRows.forEach(row => {
+        row.addEventListener('click', () => {
+          const src   = row.getAttribute('data-src');
+          const title = row.getAttribute('data-title');
+          const cover = row.getAttribute('data-cover');
+          const type  = row.getAttribute('data-type') || 'audio'; /* 读取类型 */
+
+          /* 更新 active 状态 */
+          spTrackRows.forEach(r => r.classList.remove('sp-active-track', 'sp-is-playing'));
+          row.classList.add('sp-active-track');
+
+          /* 更新封面 */
+          if (cover && spCoverImg) spCoverImg.src = cover;
+
+          /* 更新标题 */
+          spTitleEl.textContent = title;
+
+          if (type === 'youtube') {
+            /* ---- YouTube 模式 ---- */
+            /* 先停掉音频 */
+            spAudio.pause();
+            spAudio.src = '';
+            spCard.classList.remove('is-playing');
+
+            /* 切换到 YouTube 模式（CSS 隐藏波形，显示 iframe） */
+            spCard.classList.add('is-youtube');
+
+            /* 注入 YouTube embed src（含 autoplay） */
+            spYtIframe.src = src;
+
+            /* 时间显示重置 */
+            spTimeCur.textContent = '0:00';
+            spTimeTot.textContent = '--:--';
+            resetBars();
+
+            /* YouTube 曲目也标记 is-playing（封面脉冲） */
+            spCard.classList.add('is-playing');
+            updateActiveRowState();
+
+          } else {
+            /* ---- 普通音频模式 ---- */
+            /* 清掉 YouTube iframe */
+            spYtIframe.src = '';
+            spCard.classList.remove('is-youtube');
+
+            /* 切换音频源 */
+            spAudio.src = src;
+            spTimeTot.textContent = '0:00';
+            spTimeCur.textContent = '0:00';
+            resetBars();
+
+            spAudio.load();
+            spAudio.play().catch(() => {});
+            spCard.classList.add('is-playing');
+            updateActiveRowState();
+          }
+        });
+      });
+
+      /* 键盘空格 */
+      document.addEventListener('keydown', e => {
+        if (e.code === 'Space' && e.target === document.body) {
+          e.preventDefault();
+          togglePlay();
+        }
+      });
+
+    })();
+    </script>
+  </body>
+</html>
